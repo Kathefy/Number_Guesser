@@ -1,9 +1,18 @@
+/*
+Game Functions:
+-player must guess a number between a min and max
+-player gets a certain amount of guesses
+-notify the player of guesses remaining 
+-show the correct number if loose
+-let the player choose to play again
+*/
+
 let min = 1,
   max = 10,
-  winningNum = 2,
+  winningNum = getRandomNum(min, max),
   guessesLeft = 3;
 
-const game = document.querySelector('#game'),
+const gameContainer = document.querySelector('#game'),
   minNum = document.querySelector('.minNum'),
   maxNum = document.querySelector('.maxNum'),
   guessBtn = document.querySelector('#submit'),
@@ -12,6 +21,13 @@ const game = document.querySelector('#game'),
 
 minNum.textContent = min;
 maxNum.textContent = max;
+
+// Play again event listener
+gameContainer.addEventListener('mousedown', function(e) {
+  if (e.target.className === 'playAgain') {
+    window.location.reload();
+  }
+});
 
 //Listen for submit
 guessBtn.addEventListener('click', function() {
@@ -42,16 +58,24 @@ guessBtn.addEventListener('click', function() {
   }
 });
 
-// Message
-function setMessage(text, color) {
-  msg.textContent = text;
-  msg.style.color = color;
-}
-
 function gameOver(result, msg) {
   let color;
   result === true ? (color = 'green') : (color = 'red');
   guessInput.disabled = true;
   guessInput.style.borderColor = color;
   setMessage(msg, color);
+  // Play again
+  guessBtn.value = 'Play again';
+  guessBtn.className += 'playAgain';
+}
+
+// Message
+function setMessage(text, color) {
+  msg.textContent = text;
+  msg.style.color = color;
+}
+
+// Get winnig number
+function getRandomNum(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
